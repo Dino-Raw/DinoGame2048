@@ -48,11 +48,12 @@ fun GameGrid(
 ) {
     BoxWithConstraints(
         modifier = modifier
+            .aspectRatio(1f)
             .background(
                 color = GridBackground,
                 shape = RoundedCornerShape(2)
             ).padding(all = 8.dp)
-            .aspectRatio(1f)
+
     ) {
         val gridSizePx = with(LocalDensity.current) { min(maxWidth.toPx(), maxHeight.toPx()) }
         val tileMarginPx = with(LocalDensity.current) { 8.dp.toPx() }
@@ -133,6 +134,6 @@ fun GameGrid(
 @Composable
 fun GameGridPreview() {
     DinoGame2048Theme {
-        GameGrid(mutableStateOf(listOf(Cell(2, Position(0, 0)))), mutableStateOf(true))
+        GameGrid(mutableStateOf(listOf(Cell(2, Position(0, 0)))), mutableStateOf(false))
     }
 }
