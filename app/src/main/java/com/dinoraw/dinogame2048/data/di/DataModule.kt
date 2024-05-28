@@ -1,13 +1,12 @@
 package com.dinoraw.dinogame2048.data.di
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import com.dinoraw.dinogame2048.data.local.DataBase
-import com.dinoraw.dinogame2048.domain.model.Cell
-import com.dinoraw.dinogame2048.domain.model.Game
-import com.dinoraw.dinogame2048.domain.model.Grid
-import com.dinoraw.dinogame2048.domain.model.Score
+import com.dinoraw.dinogame2048.data.local.LocalDataSource
+import com.dinoraw.dinogame2048.data.local.LocalDataSourceImpl
+import com.dinoraw.dinogame2048.data.local.dataStore
+import com.dinoraw.dinogame2048.data.repository.RepositoryImpl
+import com.dinoraw.dinogame2048.domain.repository.Repository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,21 +16,18 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataModule {
-    @Provides
+abstract class DataModule {
+    @Binds
     @Singleton
-    fun provideScore() = Score(0, 44)
+    abstract fun bindLocalDataSource(localDataSourceImpl: LocalDataSourceImpl): LocalDataSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideGrid() = Grid(_cells = mutableListOf())
+    abstract fun bindRepository(repositoryImpl: RepositoryImpl): Repository
 
-    @Provides
-    @Singleton
-    fun provideGame(grid: Grid, score: Score) = Game(grid, score)
-
-    @Provides
-    @Singleton
-    fun provideDataBase(@ApplicationContext context: Context) =
-        Room.databaseBuilder(context, DataBase::class.java,"${context.packageName}.DB").build()
+    companion object {
+        @Provides
+        @Singleton
+        fun provideDataStore(@ApplicationContext context: Context) = context.dataStore
+    }
 }

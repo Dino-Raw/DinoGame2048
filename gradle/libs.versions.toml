@@ -1,16 +1,17 @@
 [versions]
-agp = "8.4.0"
+agp = "8.4.1"
 kotlin = "1.9.23"
 coreKtx = "1.12.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
+kotlinxSerializationJson = "1.6.3"
 lifecycle = "2.7.0"
 activityCompose = "1.8.2"
 composeBom = "2024.04.00"
 hilt = "2.50"
 hiltNavigationCompose = "1.2.0"
-room = "2.6.1"
+datastore = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,13 +33,12 @@ androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navig
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 google-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 google-hilt-android-compilier = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-androidx-room-runtime = {group = "androidx.room", name = "room-runtime", version.ref = "room"}
-androidx-room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "room"}
-androidx-room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "room"}
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+jetbrains-kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 googleDaggerHiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 jetbrainsKotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-androidxRoom = { id = "androidx.room", version.ref = "room" }
+jetbrainsKotlinPluginSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

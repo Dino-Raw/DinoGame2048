@@ -1,8 +1,14 @@
 package com.dinoraw.dinogame2048.domain.model
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-class Game (
+
+@Serializable
+data class Game (
+    @SerialName("grid")
     private var _grid: Grid,
+    @SerialName("score")
     private var _score: Score,
 ) {
     val cells: List<Cell> get() = _grid.cells
@@ -30,7 +36,6 @@ class Game (
     }
 
     fun isOver(): Boolean {
-        _grid.removeCellsThatMayMerge()
         Direction.entries.forEach { direction ->
             val parameters = _grid.prepareForMove(direction)
             val canMove = _grid.canMove(

@@ -4,5 +4,6 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.jetbrainsKotlinKapt) apply false
     alias(libs.plugins.googleDaggerHiltAndroid) apply false
-    alias(libs.plugins.androidxRoom) apply false
+    //alias(libs.plugins.jetbrainsKotlinJvm) apply false
+    alias(libs.plugins.jetbrainsKotlinPluginSerialization) apply false
 }

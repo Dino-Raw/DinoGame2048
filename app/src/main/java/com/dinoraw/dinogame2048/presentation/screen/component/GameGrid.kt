@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -21,10 +24,12 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.dinoraw.dinogame2048.domain.model.Cell
 import com.dinoraw.dinogame2048.domain.model.Position
 import com.dinoraw.dinogame2048.presentation.model.ColorTile
@@ -35,18 +40,10 @@ import com.dinoraw.dinogame2048.util.Const.GRID_SIZE
 import kotlinx.coroutines.launch
 import kotlin.math.min
 
-@SuppressLint("UnrememberedMutableState", "MutableCollectionMutableState")
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun GameGridPreview() {
-    DinoGame2048Theme {
-        GameGrid(mutableStateOf(mutableListOf(Cell(2, Position(0, 0)))))
-    }
-}
-
 @Composable
 fun GameGrid(
     grid: State<List<Cell>>,
+    isOver: State<Boolean>,
     modifier: Modifier = Modifier,
 ) {
     BoxWithConstraints(
@@ -54,8 +51,7 @@ fun GameGrid(
             .background(
                 color = GridBackground,
                 shape = RoundedCornerShape(2)
-            )
-            .padding(all = 8.dp)
+            ).padding(all = 8.dp)
             .aspectRatio(1f)
     ) {
         val gridSizePx = with(LocalDensity.current) { min(maxWidth.toPx(), maxHeight.toPx()) }
@@ -94,15 +90,22 @@ fun GameGrid(
                     val animatedScale = remember { Animatable(fromScale) }
                     val animatedOffset = remember { Animatable(fromOffset, Offset.VectorConverter) }
                     val colorTile = ColorTile(cell.number)
+
                     Tile(
                         text = cell.number,
                         textColor = colorTile.number,
-                        backgroundColor = colorTile.background,
-                        textSize = (tileSizePx / LocalDensity.current.density / 2).sp,
-                        size = (tileSizePx / LocalDensity.current.density).dp,
-                        animatedScale = animatedScale,
-                        animatedOffset = animatedOffset,
                         modifier = Modifier
+                            .graphicsLayer(
+                                scaleX = animatedScale.value,
+                                scaleY = animatedScale.value,
+                                translationX = animatedOffset.value.x,
+                                translationY = animatedOffset.value.y,
+                            )
+                            .size((tileSizePx / LocalDensity.current.density).dp)
+                            .background(
+                                color = colorTile.background,
+                                shape = RoundedCornerShape(4)
+                            )
                     )
                     LaunchedEffect(cell.position) {
                         launch { animatedScale.animateTo(1f, tween(200, 50)) }
@@ -111,5 +114,25 @@ fun GameGrid(
                 }
             }
         }
+
+        if (isOver.value)
+            GameDialog {
+                Text(
+                    text = "Game is over!",
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    textAlign = TextAlign.Center
+                )
+            }
+    }
+}
+
+@SuppressLint("UnrememberedMutableState")
+@Preview
+@Composable
+fun GameGridPreview() {
+    DinoGame2048Theme {
+        GameGrid(mutableStateOf(listOf(Cell(2, Position(0, 0)))), mutableStateOf(true))
     }
 }

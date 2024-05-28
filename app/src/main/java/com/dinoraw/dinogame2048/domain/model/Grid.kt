@@ -1,31 +1,25 @@
 package com.dinoraw.dinogame2048.domain.model
 
 import com.dinoraw.dinogame2048.util.Const.GRID_SIZE
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 class Grid(
-    private var _cells: MutableList<Cell>,
+    @SerialName("cells")
+    private var _cells: MutableList<Cell> = mutableListOf(),
 ) {
-    val cells: List<Cell> get() = _cells
-    private val numberStartingCells: Int = 2
 
-    init {
-        addCell(numberStartingCells)
-        print()
+    companion object {
+        val default = Grid().also {
+            it.addCell(2)
+        }
     }
+
+    val cells: List<Cell> get() = _cells
 
     fun clear() {
         _cells.clear()
-    }
-
-    fun print() {
-        for (row in 0 until GRID_SIZE) {
-            for (col in 0 until GRID_SIZE) {
-                val cell = findCellByPosition(Position(row = row, column = col))
-                print(cell?.number ?: 0)
-            }
-            println()
-        }
-        println("----")
     }
 
     fun prepareForMove(direction: Direction, ) = when (direction) {
@@ -82,7 +76,7 @@ class Grid(
                 if (cellsReadyToMerge(nextPosition)) break
 
                 currentCell = currentCell.copy(
-                    previousPosition = currentCell.position,
+                    //previousPosition = currentCell.position,
                     position = nextPosition,
                 )
                 nextPosition = nextPosition.copy(
@@ -92,7 +86,7 @@ class Grid(
                 nextCell = findCellByPosition(nextPosition)
                 isMove = true
             }
-            if (isMove) _cells[cellNum] = currentCell.copy()
+            if (isMove) _cells[cellNum] = currentCell.copy(previousPosition = _cells[cellNum].position,)
         }
         return isMove
     }

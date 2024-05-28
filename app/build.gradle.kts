@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.jetbrainsKotlinKapt)
     alias(libs.plugins.googleDaggerHiltAndroid)
+    alias(libs.plugins.jetbrainsKotlinPluginSerialization)
 }
 
 android {
@@ -69,14 +70,11 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.android.compilier)
-
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.jetbrains.kotlin.serialization)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -85,5 +83,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("io.github.theapache64:rebugger:1.0.0-rc03")
 }
